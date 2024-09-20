@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <script>
+        // Rest and Spread operator and destructuring 
+        // Spread Operator
+        // var pcItems = ['mouse', 'keyboard', 'monitor', 'cpu'];
+        // var otherPcItems = [ 'printer',  'webcam', ...pcItems];
+        // console.log(otherPcItems);
+
+        // Without Spread Operator
+        // let otherPcItems = ['printer', 'webcam'];
+        // let newArray = pcItems.concat(otherPcItems)
+
+        // // Rest Operator
+        function pcItems(...items) {
+            for (const item of items) {
+                console.log(item);
+            }
+        }
+        pcItems('mouse', 'keyboard');
+
+        // Without Rest Operator
+        // function pcItems(items) {
+        //     for (const item of items) {
+        //         console.log(item);
+        //     }
+        // }
+        // pcItems(['mouse', 'keyboard']);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="task.css">
+</head>
+<body>
+    <div class="task-manager">
+        <h1>Task Manager</h1>
+        
+        <form id="task-form">
+            <input type="text" id="task-title" placeholder="Task Title" required>
+            <input type="date" id="task-date" required>
+            <select id="task-priority" required>
+                <option value="" disabled selected>Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <select id="task-progress" required>
+                <option value="" disabled selected>Progress</option>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <div class="filters">
+            <label for="filter-date">Filter by Date:</label>
+            <input type="date" id="filter-date">
+
+            <label for="filter-priority">Filter by Priority:</label>
+            <select id="filter-priority">
+                <option value="">All</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <label for="filter-progress">Filter by Progress:</label>
+            <select id="filter-progress">
+                <option value="">All</option>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <div id="task-list"></div>
+    </div>
+
+    <script src="task.js"></script>
+</body>
+</html>

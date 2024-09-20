@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.task-manager {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+form input, form select, form button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#task-list {
+    list-style: none;
+    padding: 0;
+}
+
+#task-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#task-list li .task-actions button {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#task-list li .task-actions button:hover {
+    color: #007bff;
+}
+
+    </style>
+</head>
+<body>
+    <div class="task-manager">
+        <h1>Task Manager</h1>
+        
+        <!-- Task Input Form -->
+        <form id="task-form">
+            <input type="text" id="task-name" placeholder="Enter task..." required>
+            <input type="date" id="task-date" required>
+            <select id="task-priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <select id="task-status">
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Filters -->
+        <div class="filters">
+            <input type="date" id="filter-date">
+            <select id="filter-status">
+                <option value="">All Statuses</option>
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            <select id="filter-priority">
+                <option value="">All Priorities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <input type="text" id="search-bar" placeholder="Search tasks...">
+        </div>
+
+        <!-- Task List -->
+        <ul id="task-list"></ul>
+    </div>
+
+    <script >
+        document.addEventListener("DOMContentLoaded", function() {
+    const taskForm = document.getElementById('task-form');
+    const taskList = document.getElementById('task-list');
+    const filterDate = document.getElementById('filter-date');
+    const filterStatus = document.getElementById('filter-status');
+    const filterPriority = document.getElementById('filter-priority');
+    const searchBar = document.getElementById('search-bar');
+
+    // Load tasks from local storage
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Display tasks
+    function displayTasks(tasksToDisplay) {
+        taskList.innerHTML = '';
+        tasksToDisplay.forEach((task, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${task.name} - ${task.date} - ${task.priority} - ${task.status}</span>
+                <div class="task-actions">
+                    <button onclick="editTask(${index})">Edit</button>
+                    <button onclick="deleteTask(${index})">Delete</button>
+                </div>
+            `;
+            taskList.appendChild(li);
+        });
+    }
+
+    // Save tasks to local storage
+    function saveTasks() {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Add new task
+    taskForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newTask = {
+            name: document.getElementById('task-name').value,
+            date: document.getElementById('task-date').value,
+            priority: document.getElementById('task-priority').value,
+            status: document.getElementById('task-status').value
+        };
+        tasks.push(newTask);
+        saveTasks();
+        displayTasks(tasks);
+        taskForm.reset();
+    });
+
+    // Edit task
+    window.editTask = function(index) {
+        const task = tasks[index];
+        document.getElementById('task-name').value = task.name;
+        document.getElementById('task-date').value = task.date;
+        document.getElementById('task-priority').value = task.priority;
+        document.getElementById('task-status').value = task.status;
+        tasks.splice(index, 1);
+    }
+
+    // Delete task
+    window.deleteTask = function(index) {
+        tasks.splice(index, 1);
+        saveTasks();
+        displayTasks(tasks);
+    }
+
+    // Filter tasks
+    function filterTasks() {
+        let filteredTasks = tasks.filter(task => {
+            const matchesDate = filterDate.value === '' || task.date === filterDate.value;
+            const matchesStatus = filterStatus.value === '' || task.status === filterStatus.value;
+            const matchesPriority = filterPriority.value === '' || task.priority === filterPriority.value;
+            const matchesSearch = task.name.toLowerCase().includes(searchBar.value.toLowerCase());
+            return matchesDate && matchesStatus && matchesPriority && matchesSearch;
+        });
+        displayTasks(filteredTasks);
+    }
+
+    // Event listeners for filters and search bar
+    filterDate.addEventListener('change', filterTasks);
+    filterStatus.addEventListener('change', filterTasks);
+    filterPriority.addEventListener('change', filterTasks);
+    searchBar.addEventListener('input', filterTasks);
+
+    // Initial display of tasks
+    displayTasks(tasks);
+});
+
+    </script>
+</body>
+</html>

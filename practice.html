@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <p id="ans"></p>
+
+
+
+    <script>
+        const car = {
+            brand : "Ford",
+            model : "Mustang",
+            color : "red"
+        }
+
+        const updatecar = {
+            type : "car",
+            year : 2021,
+            color : "yellow"
+        }
+
+        const MyUpdateVehical = {...car , ...updatecar}
+
+        console.log(MyUpdateVehical);
+        
+    </script>
+</body>
+</html>
